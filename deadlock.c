@@ -14,7 +14,6 @@ pthread_mutex_t lock2 = PTHREAD_MUTEX_INITIALIZER;
 void *thread_func(void *arg) {
 	fprintf(stdout, "Thread: acquiring lock 2\n");
 	pthread_mutex_lock(&lock2);
-	sched_yield();
 	fprintf(stdout, "Thread: acquired lock 2\nThread: attempting to acquire lock 1 ...\n");
 	fprintf(stdout, "RIP\n");
 	pthread_mutex_lock(&lock1);
@@ -26,11 +25,11 @@ int main() {
 	signal(SIGINT, signal_handler);
 	pthread_t thread;
 
-	fprintf(stdout, "Main: creating new thread\n");
-	pthread_create(&thread, NULL, thread_func, NULL);		/* Main spawns a thread */
 
 	fprintf(stdout, "Main: acquiring lock 1\n");
 	pthread_mutex_lock(&lock1);													/* Main thread grabs the first lock */
+	fprintf(stdout, "Main: creating new thread\n");
+	pthread_create(&thread, NULL, thread_func, NULL);		/* Main spawns a thread */
 	fprintf(stdout, "Main: yielding to new thread\n");
 	sched_yield();																			/* Now, a context switch happens... */
 
