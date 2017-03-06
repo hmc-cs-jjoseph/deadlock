@@ -41,6 +41,7 @@ int main() {
 	 * the new thread to release lock 2.
 	 */
 
+	pthread_join(thread, NULL);
 	pthread_mutex_lock(&lock2);													/* Main thread can't acquire lock 2 */
 	
 	fprintf(stdout, "Main: returning from main\n");
